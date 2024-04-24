@@ -1,0 +1,246 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Stockmood {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card ">
+      <div class="card-header">
+        <h4 class="card-title"> Stock table</h4>
+        <h5>Stock table with average flair score, arouse score and prediction of next day trend</h5>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover table-condensed">
+            <thead><tr><th title="Field #1">Stock Name</th>
+            <th title="Field #2">date</th>
+            <th title="Field #3">flair score</th>
+            <th title="Field #4">arouse score</th>
+            <th title="Field #5">Predicted next day trend</th>
+            </tr></thead>
+            <tbody><tr>
+            <td>Amazon</td>
+            <td>9/30/21</td>
+            <td align="right">-0.097992</td>
+            <td align="right">4.159856</td>
+            <td>Increase</td>
+            </tr>
+            <tr>
+            <td>Alphabet</td>
+            <td>9/30/21</td>
+            <td align="right">-0.422597</td>
+            <td align="right">4.128433</td>
+            <td>Decrease</td>
+            </tr>
+            <tr>
+            <td>Apple</td>
+            <td>9/30/21</td>
+            <td align="right">-0.221729</td>
+            <td align="right">4.138253</td>
+            <td>Decrease</td>
+            </tr>
+            <tr>
+            <td>Costco</td>
+            <td>9/30/21</td>
+            <td align="right">-0.204644</td>
+            <td align="right">4.288334</td>
+            <td>Decrease</td>
+            </tr>
+            <tr>
+            <td>Disney</td>
+            <td>9/30/21</td>
+            <td align="right">0.077928</td>
+            <td align="right">4.307758</td>
+            <td>Decrease</td>
+            </tr>
+            <tr>
+            <td>Facebook</td>
+            <td>9/30/21</td>
+            <td align="right">-0.511139</td>
+            <td align="right">4.256696</td>
+            <td>Increase</td>
+            </tr>
+            <tr>
+            <td>Mastercard</td>
+            <td>9/30/21</td>
+            <td align="right">-0.137117</td>
+            <td align="right">4.199257</td>
+            <td>Decrease</td>
+            </tr>
+            <tr>
+            <td>Microsoft</td>
+            <td>9/30/21</td>
+            <td align="right">-0.454336</td>
+            <td align="right">4.126698</td>
+            <td>Decrease</td>
+            </tr>
+            <tr>
+            <td>Netflix</td>
+            <td>9/30/21</td>
+            <td align="right">0.173407</td>
+            <td align="right">4.181456</td>
+            <td>Increase</td>
+            </tr>
+            <tr>
+            <td>Nike</td>
+            <td>9/30/21</td>
+            <td align="right">-0.20647</td>
+            <td align="right">4.274912</td>
+            <td>Decrease</td>
+            </tr>
+            <tr>
+            <td>Pinterest</td>
+            <td>9/30/21</td>
+            <td align="right">0.053015</td>
+            <td align="right">4.14023</td>
+            <td>Increase</td>
+            </tr>
+            <tr>
+            <td>Shopify</td>
+            <td>9/30/21</td>
+            <td align="right">-0.394279</td>
+            <td align="right">4.098984</td>
+            <td>Increase</td>
+            </tr>
+            <tr>
+            <td>Spotify</td>
+            <td>9/30/21</td>
+            <td align="right">-0.482359</td>
+            <td align="right">4.062929</td>
+            <td>Decrease</td>
+            </tr>
+            <tr>
+            <td>Teladoc</td>
+            <td>9/30/21</td>
+            <td align="right">0.877461</td>
+            <td align="right">3.792047</td>
+            <td>Decrease</td>
+            </tr>
+            <tr>
+            <td>Tesla</td>
+            <td>9/30/21</td>
+            <td align="right">-0.18986</td>
+            <td align="right">4.12198</td>
+            <td>Increase</td>
+            </tr>
+            <tr>
+            <td>SP500</td>
+            <td>9/30/21</td>
+            <td align="right">-0.305615</td>
+            <td align="right">4.357162</td>
+            <td>Decrease</td>
+            </tr>
+            <tr>
+            <td>VIX</td>
+            <td>9/30/21</td>
+            <td align="right">-0.48003</td>
+            <td align="right">4.230248</td>
+            <td>Decrease</td>
+            </tr>
+            <tr>
+            <td>TQQQ</td>
+            <td>9/30/21</td>
+            <td align="right">-0.320843</td>
+            <td align="right">4.054335</td>
+            <td>Decrease</td>
+            </tr>
+            </tbody></table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="card " style="height: 40rem;">
+      <div class="card-header">
+        <h4 class="card-title"> Sentiment Heat Map</h4>
+        <h5>A data-driven “paint by numbers” two-way matrix</h5>
+      </div>
+      <div class="card-body" id="container"></div>
+      </div>
+  </div>
+</div>
+
+{% endblock content %}
+
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script>
+  function actionOnLoad(){
+    $.ajax({
+      async:false,
+      type: 'GET',
+      url: '/get_heat_map'
+    }).done(function(data){
+      console.log('returned data: ', data);
+      //TODO: draw graphs here
+      //heat map
+      var dataSet = anychart.data.set(data);
+      var heatMapData = dataSet.mapAs({
+        x: 'x',
+        y: 'y',
+        heat: 'sentiment',
+        value: 'flair'
+      });
+      chart = anychart.heatMap(heatMapData);
+        
+      chart
+            .tooltip()
+            .title({ useHtml: true })
+            .useHtml(true)
+            .titleFormat(function () {
+              return (
+                '<span style="color: #CECECE">' +
+                this.getData('y')
+              );
+            }).format(function () {
+              return (
+                '<span style="color: #CECECE">Date: </span>' +
+                this.getData('x') +
+                '<br/>' +
+                '<span style="color: #CECECE">Flair Score: </span>' +
+                this.getData('flair') +
+                '<br/>' +
+                '<span style="color: #CECECE">Sentiment: </span>' +
+                this.getData('sentiment')
+              );
+            });
+
+      // var customColorScale = anychart.scales.linearColor();
+      // customColorScale.colors(["#2EB62C", "#57C84D", "#83D475", "#ABE098", "#C5E8B7"]);
+      var colorScale = anychart.scales.ordinalColor();
+      colorScale.ranges([
+            { equal: 'NEGATIVE', color: '#ea4c46', name: '-1.00 ~ -0.35'},
+            { equal: 'NEUTRAL', color: '#FFB66E', name: '-0.35 ~ 0.35' },
+            { equal: 'POSITIVE', color: '#2eb62c', name: '0.35 ~ 1.00' }
+          ]);
+          chart.colorScale(colorScale);
+        
+      // chart.colorScale(customColorScale);
+
+      chart
+          .legend()
+          .enabled(true)
+          .align('left')
+          .position('center-top')
+          .itemsLayout('horizontal')
+          .padding([0, 0, 8, 75]);
+        
+      chart.container("container");
+        
+      chart.draw();
+
+    })
+  }
+  $(document).ready(function() {
+    actionOnLoad();
+  });
+
+</script>
+{% endblock javascripts %}

@@ -1,0 +1,6 @@
+services:
+  appseed-app:
+    restart: always
+    build: .
+    ports:
+      - 5000:5000

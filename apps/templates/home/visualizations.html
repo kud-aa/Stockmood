@@ -1,0 +1,152 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Visualizations {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+    <div class="row">
+      <div class="col-12">
+        <form class="form-inline" method="POST" action="/visualizations.html">
+          <div class="form-group">
+            <div class="input-group">
+                <select name="comp_select" class="selectpicker form-control" id="stockDropDown">
+                  {% for stock in stock_list %}
+                  <option value="{{ stock['stockID'] }}" class="selected_stock">{{ stock['Name'] }}</option>
+                  {% endfor %}
+                </select>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-12">
+        <div class="card card-chart">
+          <div class="card-header ">
+            <div class="row">
+              <div class="col-sm-6 text-left">
+                <h2 class="card-title">Stock Trend VS Avg Flair Score</h2>
+                <h5>A combination of stock trend bar chart and average Flair sentiment score line chart for last 7 days</h5>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <canvas id="Timeline", height="300"></canvas>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="card card-chart">
+          <div class="card-header">
+            <h3 class="card-title">Mood Distribution Bar Chart</h3>
+            <h5>A bar chart showing the counts of positive and negative tweets of the current stock for last 7 days</h5>
+          </div>
+          <div class="card-body">
+            <canvas id="moodBarChart", width="1000" height="500"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card card-chart">
+          <div class="card-header">
+            <h3 class="card-title">Emotional Reflection</h3>
+            <h5>Sentiment score of yesterday's tweets. X Axis reflects the pleasure score, y axis reflects the arousal score</h5>
+          </div>
+          <div class="card-body">
+            <canvas id="emotionDot", width="1000" height="500"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="row">
+        <div class="col-lg-6 col-md-6">
+          <div class="card ">
+            <div class="card-header">
+              <h3 class="card-title"> Word Cloud</h3>
+              <h5>Top 50 words that present in the past 7 days's tweet</h5>
+            </div>
+            <div class="card-body">
+               <canvas id="WordCloud", width="600" height="600"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-12">
+          <div class="card ">
+            <div class="card card-tasks">
+              <div class="card-header">
+                <h3 class="card-title"> Tweet Message</h3>
+              </div>
+              <div class="card-body" >
+                <div class="table-full-width table-responsive" >
+                  <table class="table" id="tweetMessage">
+                    <thead class=" text-primary">
+                      <tr>
+                        <th class="text-center"> Create Day </th>
+                        <th class="text-center"> Tweet </th>
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <script>
+    $(document).ready(function() {
+      // Javascript method's body can be found in assets/js/demos.js
+      demo.initDashboardPageCharts();
+      $.ajax({
+      async:false,
+      data:{
+          selectedStockId: '1' //amazon
+        },
+        type: 'GET',
+        url: '/get_stock_data'
+      }).done(function(data){
+        console.log('returned data: ', data);
+        //TODO: draw graphs here
+        demo.drawBarChart(data);
+        demo.drawWordCloudGraph(data);
+        demo.drawTimeline(data);
+        demo.drawTweetDisplay(data);
+        demo.drawEmotionGraph(data);
+      })
+    });
+
+    $("#stockDropDown").on('change', function(){
+      selectedStockId = this.value;
+      console.log('selected stock id: ', selectedStockId);
+      $.ajax({
+        data:{
+          selectedStockId: selectedStockId
+        },
+        type: 'GET',
+        url: '/get_stock_data'
+      }).done(function(data){
+        console.log('returned data: ', data);
+        //TODO: draw graphs here
+        //heat map
+        //demo.drawHeatMap(data.heat_map);
+        demo.drawBarChart(data);
+        demo.drawWordCloudGraph(data);
+        demo.drawTimeline(data);
+        demo.drawTweetDisplay(data);
+        demo.drawEmotionGraph(data);
+      })
+    })
+
+  </script>
+
+{% endblock javascripts %}

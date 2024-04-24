@@ -1,0 +1,56 @@
+
+
+    <div class="sidebar">
+      <div class="sidebar-wrapper">
+        <ul class="nav">
+          <!-- <li class="{% if 'index' in segment %} active {% endif %}">
+              <a href="/">
+                <i class="tim-icons icon-chart-pie-36"></i>
+                <p>Dashboard</p>
+              </a>
+          </li> -->
+          <li class="{% if 'table' in segment %} active {% endif %}">
+            <a href="/">
+              <i class="tim-icons icon-paper"></i>
+              <p>Stock Table</p>
+            </a>
+          </li>
+          <li class="{% if 'visualizations' in segment %} active {% endif %}">
+            <a href="/visualizations.html">
+              <i class="tim-icons icon-paper"></i>
+              <p>Visualizations</p>
+            </a>
+          </li>
+          <!-- <li class="{% if 'icons' in segment %} active {% endif %}">
+            <a href="/ui-icons.html">
+              <i class="tim-icons icon-atom"></i>
+              <p>Icons</p>
+            </a>
+          </li>
+          <li class="{% if 'notifications' in segment %} active {% endif %}">
+            <a href="/ui-notifications.html">
+              <i class="tim-icons icon-bell-55"></i>
+              <p>Notifications</p>
+            </a>
+          </li>
+          <li class="{% if 'tables' in segment %} active {% endif %}">
+            <a href="/ui-tables.html">
+              <i class="tim-icons icon-puzzle-10"></i>
+              <p>Table List</p>
+            </a>
+          </li>
+          <li class="{% if 'typography' in segment %} active {% endif %}">
+            <a href="/ui-typography.html">
+              <i class="tim-icons icon-align-center"></i>
+              <p>Typography</p>
+            </a>
+          </li> -->
+          <li> 
+            <a href="{{ url_for('authentication_blueprint.logout') }}" >
+              <i class="tim-icons icon-button-power"></i>
+              <p>Logout</p>
+            </a>
+          </li>     
+        </ul>
+      </div>
+    </div>
