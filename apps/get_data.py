@@ -12,7 +12,7 @@ import base64
 class sqlHelper(object):
   def __init__(self):
       basedir = os.path.abspath(os.path.dirname(__file__))
-      db_file = os.path.join(basedir, 'db.sql')
+      db_file = os.path.join(basedir, 'datascalp')
       self.conn = sqlite3.connect(db_file)
       def dict_factory(cursor, row):
             d = {}

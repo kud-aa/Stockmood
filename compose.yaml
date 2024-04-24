@@ -2,5 +2,7 @@ services:
   appseed-app:
     restart: always
     build: .
+    volumes:
+      - ./datascalp:/apps/datascalp
     ports:
       - 5000:5000
