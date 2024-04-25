@@ -1,88 +1,81 @@
-# [Stockmood]
+# Stockmood
 
-[Stockmood] is a Flask application that visualizes stock sentiment using heat map, word cloud, bar charts, and emotional dot 
+Stockmood is a Flask application that visualizes stock sentiment using heat map, word cloud, bar charts, and emotional dot 
 graphs etc. 
 
-<br />
-
-> Description
+## Description
 
 We are building our application using a Flask Dashboard boilerplate called Flask Dashboard Black (https://appseed.us/admin-dashboards/flask-dashboard-black).
 
-We are using the following packages in our flask (v2.0.1) application:
-- Flask_login (v0.5.0): provides user session management.
-- Flask_migrate (v3.1.0): handles SQLAlchemy database migrations for flask.
-- Flask_wtf (v0.15.1): used for designing forms in the flask web application.
-- WTForms (v2.3.3): form rendering library.
-- Flask_sqlalchemy (v2.5.1): an extension that supports SQLAlchemy with flask application.
-- Sqlalchemy (v1.4.23): SQL toolkit and object-relational mapper for Python.
-- Email_validator (v1.1.3): used for validating user email addresses during the signup process.
-- Python-decouple (v3.4): helps separate our app settings from source code.
-- Gunicorn (v20.1.0): Python web server gateway interface HTTP server.
-- Jinja2 (v3.0.1): template rendering engine that renders our UI.
-- Flask-restx (v0.5.1): flask extension for building REST APIs.
-- Pandas (v1.3.4): used for transforming sql data to dataframe that passed to the front end.
-- Nltk (v3.6.5): NLP library to preprocess text data for our ML models.
-- Wordcloud (v1.6.0): used for creating visual representation of words based on its frequency of appearance.
-- Numpy (v1.21.0): provides mathematical functions to help with transforming sql data.
-- Matplotlib (v3.1.2): provides visualizations tools for some of our graphs.
-
-<br />
-
-> Data Downloading
-
-Since the data is large, we stored it in a Google drive. The link is:https://drive.google.com/file/d/1Uug-_etcT_kd9vBLzqN6G1QULWy-GW5-/view?usp=sharing
-Please download it and put it under apps file.
-
-
-<br />
-
-> Installation
+## Installation & Execution
 
 ```bash
-$ # Unzip our team018final folder, and in the command prompt navigate to the code/stockmood directory
-$ cd 202112-29-StockMood
-$
-$ # Virtualenv modules installation (Unix based systems)
-$ virtualenv env
-$ source env/bin/activate
-$
-$ # Virtualenv modules installation (Windows based systems)
-$ # virtualenv env
-$ # .\env\Scripts\activate
-$
-$ # Install modules - SQLite Database
-$ pip3 install -r requirements.txt
-$
+docker compose up -d
+[+] Running 1/0
+ ✔ Container stockmood-appseed-app-1  Created                                                                                                                                                                 0.0s
+Attaching to appseed-app-1
+appseed-app-1  |  * Serving Flask app 'run.py' (lazy loading)
+appseed-app-1  |  * Environment: production
+appseed-app-1  |    WARNING: This is a development server. Do not use it in a production deployment.
+appseed-app-1  |    Use a production WSGI server instead.
+appseed-app-1  |  * Debug mode: off
+appseed-app-1  | [2024-04-25 06:25:40,523] INFO in run: DEBUG       = True
+appseed-app-1  | [2024-04-25 06:25:40,523] INFO in run: Environment = Debug
+appseed-app-1  | [2024-04-25 06:25:40,523] INFO in run: DBMS        = sqlite:////apps/db.sqlite3
+appseed-app-1  |  * Running on all addresses.
+appseed-app-1  |    WARNING: This is a development server. Do not use it in a production deployment.
+appseed-app-1  |  * Running on <generated_link> (Press CTRL+C to quit)
 ```
-<br />
+## Data
 
-> Execution
+Data is attaching via volume. Need to create datascalp sqlite file
+
+```yaml
+    volumes:
+      - ./datascalp:/apps/datascalp
+```
 
 ```bash
-$ # In the command prompt, navigate to the project directory and run the following commands.
-$ # Set the FLASK_APP environment variable
-$ (Unix/Mac) export FLASK_APP=run.py
-$ (Windows) set FLASK_APP=run.py
-$ (Powershell) $env:FLASK_APP = ".\run.py"
-$
-$ # Set up the DEBUG environment
-$ # (Unix/Mac) export FLASK_ENV=development
-$ # (Windows) set FLASK_ENV=development
-$ # (Powershell) $env:FLASK_ENV = "development"
-$
-$ # Start the application (development mode)
-$ # --host=0.0.0.0 - expose the app on all network interfaces (default 127.0.0.1)
-$ # --port=5000    - specify the app port (default 5000)  
-$ flask run --host=0.0.0.0 --port=5000
-$
-$ # Access the dashboard in browser: http://127.0.0.1:5000/
-$
-$
+sqlite3 datascalp
 ```
 
-<br />
+### Tables
 
-> Presentation and Demo Video
+```sql
+CREATE TABLE stock_list (
+    stockID INTEGER PRIMARY KEY AUTOINCREMENT,
+    Name TEXT
+);
+CREATE TABLE twitter_raw (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    date DATE,
+    tweet TEXT,
+    stockID INTEGER,
+    FOREIGN KEY(stockID) REFERENCES stock_list(stockID)
+);
+CREATE TABLE twitter_score (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    message_id INTEGER,
+    stock_id INTEGER,
+    nltk_score REAL,
+    textblob_score REAL,
+    flair_score REAL,
+    bert_score REAL,
+    FOREIGN KEY(message_id) REFERENCES twitter_raw(id),
+    FOREIGN KEY(stock_id) REFERENCES stock_list(stockID)
+);
+CREATE TABLE yahoo_finance_with_trend (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    stock_id INTEGER,
+    CLOSING_DATE DATE,
+    Next_day_Trend TEXT,
+    FOREIGN KEY(stock_id) REFERENCES stock_list(stockID)
+);
+CREATE TABLE Users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username VARCHAR(64) UNIQUE,
+    email VARCHAR(64) UNIQUE,
+    password BLOB
+);
+```
 
-https://youtu.be/a7khBKCv8Ao
